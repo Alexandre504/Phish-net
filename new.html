@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ask Gemini</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ccc;
+            width: 300px;
+            min-height: 50px;
+        }
+        #riskLevel {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ask Gemini</h1>
+    <textarea id="emailContent" placeholder="Paste your email message here..." rows="10" cols="40"></textarea>
+    <button onclick="askGemini()">Analyze Email</button>
+    <div id="response"></div>
+    <div id="riskLevel"></div>
+
+    <script>
+        async function askGemini() {
+            const emailContent = document.getElementById('emailContent').value;
+            const responseDiv = document.getElementById('response');
+            const riskLevelDiv = document.getElementById('riskLevel');
+
+            if (!emailContent) {
+                responseDiv.innerText = 'Please paste the email content!';
+                return;
+            }
+
+            responseDiv.innerText = 'Analyzing email...';
+            riskLevelDiv.innerText = '';
+
+            try {
+                const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDRECj0dxtg9HltTS5GgQBbwaVrRq1OUwg', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: emailContent }] }]
+                    })
+                });
+
+                const data = await res.json();
+                const responseText = data.candidates[0].content.parts[0].text;
+
+                // Display the response from Gemini
+                responseDiv.innerText = responseText;
+
+                // Calculate the risk level based on the email content
+                const riskScore = calculateRisk(emailContent);
+                const riskLevel = getRiskLevel(riskScore);
+
+                // Display the risk level
+                riskLevelDiv.innerText = `Risk Level: ${riskLevel}`;
+            } catch (error) {
+                responseDiv.innerText = 'Error getting response!';
+                console.error(error);
+            }
+        }
+
+        function calculateRisk(text) {
+            let score = 0;
+
+            // Define common phishing indicators and their risk scores
+            const phishingIndicators = [
+                { phrase: /immediate action required|urgent|act now/i, points: 3 },   // Urgency
+                { phrase: /your account will be locked|account suspended/i, points: 2 }, // Account issues
+                { phrase: /password|credit card|personal information/i, points: 3 },  // Requesting sensitive info
+                { phrase: /Dear Customer|Dear User/i, points: 1 },  // Generic greetings
+                { phrase: /\bhttp:\/\/[^\s]+|https:\/\/[^\s]+/i, points: 2 },  // Suspicious URL format
+                { phrase: /click here/i, points: 2 },  // Generic 'click here' links
+                { phrase: /verify your account|confirm your identity/i, points: 3 },  // Verification scams
+                { phrase: /download/i, points: 2 },  // Suspicious download prompts
+            ];
+
+            // Check for each phishing indicator in the email content
+            phishingIndicators.forEach(indicator => {
+                if (indicator.phrase.test(text)) {
+                    score += indicator.points;
+                }
+            });
+
+            return score;
+        }
+
+        function getRiskLevel(score) {
+            if (score >= 7) {
+                return "High";
+            } else if (score >= 4) {
+                return "Medium";
+            } else {
+                return "Low";
+            }
+        }
+    </script>
+</body>
+</html>
