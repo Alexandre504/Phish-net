@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ask Gemini</title>
+    <title>Cyber Threat Checker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,39 +24,23 @@
     </style>
 </head>
 <body>
-    <h1>Ask Gemini</h1>
-    <input type="text" id="question" placeholder="Ask a question..." />
-    <button onclick="askGemini()">Send</button>
-    <div id="response"></div>
+    <h1>Cyber Threat Checker</h1>
 
-    <script>
-        async function askGemini() {
-            const question = document.getElementById('question').value;
-            const responseDiv = document.getElementById('response');
+    <label for ="inputType">Input Type:</label>
+    <select id="inputType">
+        <option value="url">IP</option>
+        <option value="text">Hash</option>
+        <option value="text">URL</option>
+    </select>
+    <input type="text" id="inputValue" >/
+    <button onclick="checkThreat()">Check</button>
+    
+    <div id="results"></div>
+    <div id="history">
+        <h2>History</h2>
+    </div>"
 
-            if (!question) {
-                responseDiv.innerText = 'Please enter a question!';
-                return;
-            }
+    <script src="app.js"></script>
 
-            responseDiv.innerText = 'Thinking...';
-
-            try {
-                const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDRECj0dxtg9HltTS5GgQBbwaVrRq1OUwg', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: question }] }]
-                    })
-                });
-
-                const data = await res.json();
-                responseDiv.innerText = data.candidates[0].content.parts[0].text;
-            } catch (error) {
-                responseDiv.innerText = 'Error getting response!';
-                console.error(error);
-            }
-        }
-    </script>
 </body>
 </html>
