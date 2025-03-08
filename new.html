@@ -20,10 +20,17 @@
             border: 1px solid #ccc;
             width: 300px;
             min-height: 50px;
+            max-height: 500px; /* Optional: Set a maximum height */
+            overflow-y: auto; /* Allows scroll if content exceeds max-height */
+            resize: none; /* Disable manual resize */
+            white-space: pre-wrap; /* Keeps the text formatting */
         }
         #riskLevel {
             margin-top: 10px;
             font-size: 1.2em;
+        }
+        textarea {
+            resize: none; /* Disable manual resize */
         }
     </style>
 </head>
@@ -61,7 +68,10 @@
                 const responseText = data.candidates[0].content.parts[0].text;
 
                 // Display the response from Gemini
-                responseDiv.innerText = responseText;
+                responseDiv.innerHTML = responseText;
+
+                // Dynamically resize the response box based on its content
+                resizeResponseBox();
 
                 // Calculate the risk level based on the email content
                 const riskScore = calculateRisk(emailContent);
@@ -108,6 +118,12 @@
             } else {
                 return "Low";
             }
+        }
+
+        function resizeResponseBox() {
+            const responseDiv = document.getElementById('response');
+            responseDiv.style.height = 'auto'; // Reset height to auto to allow resizing
+            responseDiv.style.height = responseDiv.scrollHeight + 'px'; // Adjust the height based on scrollHeight
         }
     </script>
 </body>
