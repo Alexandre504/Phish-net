@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ask Gemini</title>
     <style>
         body {
@@ -11,8 +14,44 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f4f4f4;
+            background-color: #f0f8ff; /* Light blue background */
+            color: #333; /* Dark text for readability */
         }
+
+        h1 {
+            color: #007bff; /* Blue header text */
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            resize: none;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 500px;
+            min-height: 120px;
+            font-size: 1.1em;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        button {
+            background-color: #28a745; /* Green button */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
         #response {
             margin-top: 20px;
             padding: 10px;
@@ -20,20 +59,33 @@
             border: 1px solid #ccc;
             width: 300px;
             min-height: 50px;
-            max-height: 500px; /* Optional: Set a maximum height */
-            overflow-y: auto; /* Allows scroll if content exceeds max-height */
-            resize: none; /* Disable manual resize */
-            white-space: pre-wrap; /* Keeps the text formatting */
+            max-height: 500px;
+            overflow-y: auto;
+            resize: none;
+            white-space: pre-wrap;
+            background-color: #f1f1f1; /* Light gray background */
         }
+
         #riskLevel {
             margin-top: 10px;
             font-size: 1.2em;
+            color: #ff6347; /* Tomato color for risk level */
         }
-        textarea {
-            resize: none; /* Disable manual resize */
+
+        .risk-level-high {
+            color: #dc3545; /* Red for high risk */
+        }
+
+        .risk-level-medium {
+            color: #ffc107; /* Yellow for medium risk */
+        }
+
+        .risk-level-low {
+            color: #28a745; /* Green for low risk */
         }
     </style>
 </head>
+
 <body>
     <h1>Ask Gemini</h1>
     <textarea id="emailContent" placeholder="Paste your email message here..." rows="10" cols="40"></textarea>
@@ -77,8 +129,9 @@
                 const riskScore = calculateRisk(emailContent);
                 const riskLevel = getRiskLevel(riskScore);
 
-                // Display the risk level
+                // Display the risk level with color
                 riskLevelDiv.innerText = `Risk Level: ${riskLevel}`;
+                setRiskColor(riskLevel);
             } catch (error) {
                 responseDiv.innerText = 'Error getting response!';
                 console.error(error);
@@ -90,14 +143,14 @@
 
             // Define common phishing indicators and their risk scores
             const phishingIndicators = [
-                { phrase: /immediate action required|urgent|act now/i, points: 3 },   // Urgency
+                { phrase: /immediate action required|urgent|act now/i, points: 3 }, // Urgency
                 { phrase: /your account will be locked|account suspended/i, points: 2 }, // Account issues
-                { phrase: /password|credit card|personal information/i, points: 3 },  // Requesting sensitive info
-                { phrase: /Dear Customer|Dear User/i, points: 1 },  // Generic greetings
-                { phrase: /\bhttp:\/\/[^\s]+|https:\/\/[^\s]+/i, points: 2 },  // Suspicious URL format
-                { phrase: /click here/i, points: 2 },  // Generic 'click here' links
-                { phrase: /verify your account|confirm your identity/i, points: 3 },  // Verification scams
-                { phrase: /download/i, points: 2 },  // Suspicious download prompts
+                { phrase: /password|credit card|personal information/i, points: 3 }, // Requesting sensitive info
+                { phrase: /Dear Customer|Dear User/i, points: 1 }, // Generic greetings
+                { phrase: /\bhttp:\/\/[^\s]+|https:\/\/[^\s]+/i, points: 2 }, // Suspicious URL format
+                { phrase: /click here/i, points: 2 }, // Generic 'click here' links
+                { phrase: /verify your account|confirm your identity/i, points: 3 }, // Verification scams
+                { phrase: /download/i, points: 2 }, // Suspicious download prompts
             ];
 
             // Check for each phishing indicator in the email content
@@ -120,6 +173,20 @@
             }
         }
 
+        function setRiskColor(riskLevel) {
+            const riskLevelDiv = document.getElementById('riskLevel');
+            if (riskLevel === "High") {
+                riskLevelDiv.classList.add('risk-level-high');
+                riskLevelDiv.classList.remove('risk-level-medium', 'risk-level-low');
+            } else if (riskLevel === "Medium") {
+                riskLevelDiv.classList.add('risk-level-medium');
+                riskLevelDiv.classList.remove('risk-level-high', 'risk-level-low');
+            } else {
+                riskLevelDiv.classList.add('risk-level-low');
+                riskLevelDiv.classList.remove('risk-level-high', 'risk-level-medium');
+            }
+        }
+
         function resizeResponseBox() {
             const responseDiv = document.getElementById('response');
             responseDiv.style.height = 'auto'; // Reset height to auto to allow resizing
@@ -127,4 +194,5 @@
         }
     </script>
 </body>
+
 </html>
