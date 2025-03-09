@@ -4,7 +4,7 @@ import time
 
 # Set up page layout and title
 st.set_page_config(
-    page_title="PhishGuard AI",
+    page_title="PhishNet",
     layout="centered",
     initial_sidebar_state="collapsed",
     page_icon="💻",  # Terminal icon
@@ -15,6 +15,9 @@ def hacker_style():
     st.markdown(
         """
         <style>
+            /* Hide Streamlit's default header and footer */
+            header, footer {visibility: hidden;}
+
             /* Set the entire app to dark mode */
             .stApp {
                 background-color: black !important;
@@ -79,12 +82,25 @@ def hacker_style():
                 border: 1px solid #00ff00;
                 padding: 20px;
                 background-color: black;
-                white-space: pre-wrap;
+                white-space: pre-wrap;                max-height: 300px;
+                overflow-y: auto;
+                margin-bottom: 20px;
+
                 overflow-x: auto;
                 width: 100%;
                 color: #00ff00;
                 font-family: 'Consolas', 'Courier New', monospace;
                 box-shadow: 0 0 10px #00ff00;
+            }
+
+            /* Center the title */
+            .title-container {
+                width: 100%;
+                margin-bottom: 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
             }
 
             /* Style the spinner */
@@ -169,13 +185,15 @@ hacker_style()
 st.markdown('<div class="graphics"></div>', unsafe_allow_html=True)
 
 # Display the title and subtitle
-st.markdown('<div class="chat-box">', unsafe_allow_html=True)
 st.markdown(
-    '<h1 style="font-size: 32px; font-weight: bold; text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;">💀 PhishGuard AI 💀</h1>',
+    '<h1 style="font-size: 32px; font-weight: bold; text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; text-align: center;">💀 PhishNet 💀</h1>',
     unsafe_allow_html=True,
 )
 st.markdown(
-    '<p style="font-size: 16px; color: #00ff00;">Enter a suspicious URL or text to check for phishing threats.</p>',
+    '</div>', unsafe_allow_html=True,
+)
+st.markdown(
+    '<p style="font-size: 16px; color: #00ff00;">Enter a suspicious URL (e.g., \'http://www.goog1e-login.com\') or text (e.g., \'You won a free iPhone! Click here to claim\') to check for phishing threats.</p>',
     unsafe_allow_html=True,
 )
 
@@ -201,6 +219,8 @@ def analyze_phishing(input_text):
     Provide your analysis in the following format:
     - Phishing Risk: [Low/Medium/High]
     - Explanation: [Your explanation here]
+    -Confidence: [Number 1-10]
+    -Indicators: [List of indicators that led you to the conclusion]
     """
 
     # Send the prompt to Gemini
@@ -237,5 +257,3 @@ if st.button("🔍 Analyze"):
             except Exception as e:
                 st.error("❌ Error fetching response! Check your API key or internet connection.")
                 st.write(e)
-
-st.markdown("</div>", unsafe_allow_html=True)

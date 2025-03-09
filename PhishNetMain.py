@@ -14,13 +14,15 @@ def hacker_style():
     st.markdown(
         """
         <style>
+            /* Hide Streamlit's default header and footer */
+            header, footer {visibility: hidden;}
+
             /* Set the entire app to dark mode */
             .stApp {
                 background-color: black !important;
                 color: #00ff00 !important;
                 font-family: 'Consolas', 'Courier New', monospace !important;
                 overflow: hidden; /* Hide overflow for graphical effects */
-                text-align: center; /* Center all text */
             }
 
             /* Style the toolbar to match the dark theme */
@@ -80,16 +82,18 @@ def hacker_style():
 
             /* Style the terminal output box */
             .terminal-box {
-                border: 1px solid #00ff00; /* Thin border */
+                border: 1px solid #00ff00;
                 padding: 20px;
                 background-color: black;
                 white-space: pre-wrap;
+                max-height: 300px;
                 overflow-x: auto;
                 width: 100%;
                 color: #00ff00;
                 font-family: 'Consolas', 'Courier New', monospace;
                 box-shadow: 0 0 10px #00ff00;
-                margin: 20px auto;
+                margin: 20px 0; /* Remove auto centering */
+                text-align: left; /* Align text to the left */
             }
 
             /* Style the spinner */
@@ -213,20 +217,14 @@ def hacker_style():
             .binary-text {
                 position: fixed;
                 bottom: 10px;
-                left: 50%;
-                transform: translateX(-50%);
+                left: 0;
+                width: 100%;
+                text-align: center;
                 color: #00ff00;
                 font-family: 'Consolas', 'Courier New', monospace;
                 font-size: 12px;
                 opacity: 0.7;
                 text-shadow: 0 0 5px #00ff00;
-            }
-
-            /* Style for shiny green text */
-            .shiny-green {
-                color: #00ff00 !important;
-                text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
-                font-weight: bold;
             }
         </style>
         """,
@@ -276,8 +274,10 @@ def analyze_phishing(input_text):
     Input: {input_text}
 
     Provide your analysis in the following format:
-    Phishing Risk: [Low/Medium/High]
-    Explanation: [Your explanation here]
+    - Phishing Risk: [Low/Medium/High]
+    - Explanation: [Your explanation here]
+    -Confidence: [Number 1-10]
+    -Indicators: [List of indicators that led you to the conclusion]
     """
 
     # Send the prompt to Gemini
@@ -307,14 +307,9 @@ if st.button("🔍 Analyze"):
                 # Analyze the input using Gemini
                 result = analyze_phishing(input_text)
 
-                # Format the result
-                result = result.replace("- ", "")  # Remove the dots
-                result = result.replace("Phishing Risk:", "<span class='shiny-green'>Phishing Risk:</span>   ")  # Add 3 spaces
-                result = result.replace("Explanation:", "<span class='shiny-green'>Explanation:</span>   ")  # Add 3 spaces
-
                 # Display the result
                 st.markdown('<div class="terminal-box">', unsafe_allow_html=True)
-                st.markdown(f"**{result}**", unsafe_allow_html=True)
+                st.markdown(f"**Analysis Result:**\n\n{result}", unsafe_allow_html=True)
                 st.markdown("</div>", unsafe_allow_html=True)
 
             except Exception as e:
@@ -362,6 +357,6 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 # Display binary names at the bottom
 st.markdown(
-    '<div class="binary-text">01000001 01110010 01101111 01101110 | 01000001 01101100 01101001 | 01000001 01101100 01100101 01111000 | 01001010 01100001 01101011 01100101</div>',
+    '<div class="binary-text">01000001 01100001 01110010 01101111 01101110 | 01000001 01101100 01101001 | 01000001 01101100 01100101 01111000 | 01001010 01100001 01101011 01100101</div>',
     unsafe_allow_html=True,
 )
