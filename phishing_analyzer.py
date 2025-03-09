@@ -16,7 +16,7 @@ def analyze_phishing(input_text):
     Input: {input_text}
 
     Provide your analysis in the following format:
-    - Phishing Risk: [Low/Medium/High]
+    - Phishing Risk: [Low ✅,Medium ⚠️,High ❌]
     - Explanation: [Your explanation here]
     -Confidence: [Number 1-10]
     -Indicators: [List of indicators that led you to the conclusion]
