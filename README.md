@@ -68,7 +68,6 @@ API_KEY = "your_gemini_api_key_here"
 
 Phish-Net is designed to help users stay safe online by detecting phishing attempts in emails, links, and messages. With a stylish hacker-themed interface, it makes cybersecurity engaging and accessible.  
 
-Developed by: **[alex, aron, jake and ali]**  
-GitHub: **[]**  
+Developed by: **[Alex, Aaron, Jake and Ali]**  
 
 Stay safe from phishing attacks! 🕵️‍♂️💻
