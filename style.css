@@ -1,0 +1,212 @@
+/* Hide Streamlit's default header and footer */
+header, footer {visibility: hidden;}
+
+/* Set the entire app to dark mode */
+.stApp {
+    background-color: black !important;
+    color: #00ff00 !important;
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    overflow: hidden; /* Hide overflow for graphical effects */
+}
+
+/* Style the toolbar to match the dark theme */
+header[data-testid="stHeader"] {
+    background-color: black !important;
+    border-bottom: 1px solid #00ff00 !important;
+}
+
+/* Add fish and net emoji to the top-left corner of the toolbar */
+header[data-testid="stHeader"]::before {
+    content: "🐟🕸️";
+    font-size: 24px;
+    margin-right: 10px;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Style the input fields */
+.stTextInput>div>div>input {
+    background-color: black !important;
+    color: #00ff00 !important;
+    border: 1px solid #00ff00 !important;
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Style the input label */
+.stTextInput>label {
+    color: #00ff00 !important;
+    font-family: 'Consolas', 'Courier New', monospace !important;
+}
+
+/* Style the buttons */
+.stButton>button {
+    background-color: black !important;
+    color: #00ff00 !important;
+    border: 1px solid #00ff00 !important;
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for buttons */
+.stButton>button:hover {
+    background-color: #00ff00 !important;
+    color: black !important;
+    border: 1px solid #00ff00 !important;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #00ff00;
+}
+
+/* Style the terminal output box */
+.terminal-box {
+    border: 1px solid #00ff00;
+    padding: 20px;
+    background-color: black;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-x: auto;
+    width: 100%;
+    color: #00ff00;
+    font-family: 'Consolas', 'Courier New', monospace;
+    box-shadow: 0 0 10px #00ff00;
+    margin: 20px 0; /* Remove auto centering */
+    text-align: left; /* Align text to the left */
+}
+
+/* Style the spinner */
+.stSpinner>div {
+    color: #00ff00 !important;
+}
+
+/* Style warnings and errors */
+.stWarning, .stError {
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    color: #ff0000 !important;
+    text-align: center;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 800px;
+}
+
+/* Add a blinking cursor effect */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.blinking-cursor {
+    display: inline-block;
+    width: 10px;
+    height: 20px;
+    background-color: #00ff00;
+    animation: blink 1s infinite;
+}
+
+/* Graphical effects outside the chat box */
+.graphics {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.graphics::before, .graphics::after {
+    content: "";
+    position: absolute;
+    background: radial-gradient(circle, #00ff00 10%, transparent 10.01%);
+    opacity: 0.2;
+    animation: moveParticles 10s linear infinite;
+}
+
+.graphics::before {
+    top: 20%;
+    left: 10%;
+    width: 100px;
+    height: 100px;
+    animation-duration: 15s;
+}
+
+.graphics::after {
+    top: 50%;
+    left: 80%;
+    width: 150px;
+    height: 150px;
+    animation-duration: 20s;
+}
+
+@keyframes moveParticles {
+    0% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(100px) translateX(100px); }
+    100% { transform: translateY(0) translateX(0); }
+}
+
+/* Style for the big title box */
+.title-box {
+    border-bottom: 1px solid #00ff00; /* Thin line */
+    padding: 10px;
+    background-color: black;
+    width: 50%;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #00ff00;
+}
+
+/* Style for the bottom sections */
+.bottom-section {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.bottom-section button {
+    background-color: black !important;
+    color: #00ff00 !important;
+    border: 1px solid #00ff00 !important;
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    padding: 10px 20px;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.bottom-section button:hover {
+    background-color: #00ff00 !important;
+    color: black !important;
+    border: 1px solid #00ff00 !important;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #00ff00;
+}
+
+/* Style for the lines */
+.line {
+    border-bottom: 1px solid #00ff00;
+    width: 80%;
+    margin: 20px auto;
+    box-shadow: 0 0 10px #00ff00;
+}
+
+/* Style for the binary text */
+.binary-text {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #00ff00;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    opacity: 0.7;
+    text-shadow: 0 0 5px #00ff00;
+}
