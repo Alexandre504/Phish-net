@@ -40,7 +40,7 @@ Phish-Net is a powerful phishing detection tool that helps users identify potent
 Make sure you have Python installed. Then, clone the repository and install the required packages in the correct directory:
 
 ```bash
-git clone https://github.com/Alexandre504/X.git
+git clone https://github.com/Alexandre504/Phish-net.git
 cd X
 pip install -r requirements.txt
 ```
