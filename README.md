@@ -60,7 +60,7 @@ API_KEY = "your_gemini_api_key_here"
 ## Privacy Policy 🔒  
 
 - **No data is stored** – All analysis happens in real-time.  
-- **No user tracking** – Your inputs are not logged or saved.  
+- **No user tracking** – Your inputs are not logged or saved. 
 
 ---
 
