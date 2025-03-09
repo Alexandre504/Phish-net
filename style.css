@@ -1,6 +1,3 @@
-/* Hide Streamlit's default header and footer */
-header, footer {visibility: hidden;}
-
 /* Set the entire app to dark mode */
 .stApp {
     background-color: black !important;
