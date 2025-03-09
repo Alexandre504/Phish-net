@@ -31,13 +31,14 @@ Phish-Net is a powerful phishing detection tool that helps users identify potent
    - Click the "🔍 Analyze" button to check for phishing risks.  
 
 4. **View Results**  
-   - The tool will display a phishing risk level (**Low/Medium/High**) along with an explanation.  
+   - The tool will display a phishing risk level (**Low/Medium/High**) along with an explanation, confidence rating, and indicators that helped with conclusion.  
 
 ---
 
 ## Installation 📥  
 
 Make sure you have Python installed. Then, clone the repository and install the required packages:  
+[placeholder step will implement later]
 
 ```bash
 git clone https://github.com/your-repo/phish-net.git
@@ -49,7 +50,7 @@ pip install -r requirements.txt
 
 ## API Key Setup 🔑  
 
-Phish-Net uses Google Gemini for phishing analysis. Replace `API_KEY` in `app.py` with your own key:  
+Phish-Net uses Google Gemini for phishing analysis. Replace `API_KEY` in `phishing_analyzer.py` with your own key:  
 
 ```python
 API_KEY = "your_gemini_api_key_here"
@@ -66,7 +67,7 @@ API_KEY = "your_gemini_api_key_here"
 
 ## About ℹ️  
 
-Phish-Net is designed to help users stay safe online by detecting phishing attempts in emails, links, and messages. With a stylish hacker-themed interface, it makes cybersecurity engaging and accessible.  
+Phish-Net is designed to help users stay safe online by detecting phishing attempts in emails, links, and messages. With a stylish hacker-themed interface, it makes cybersecurity engaging and accessible.
 
 Developed by: **[Alex, Aaron, Jake and Ali]**  
 
