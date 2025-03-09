@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fishing for phishing</title>
+    <title>Ask Gemini</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,39 +16,66 @@
             background-color: #f0f8ff;
             color: #333;
         }
-        h1 { color: #007bff; }
-        textarea, button { margin-top: 10px; }
-        button { background-color: #28a745; color: white; padding: 10px 20px; }
-        button:hover { background-color: #218838; }
-        #response, #riskLevel, #suspiciousMaterial, #reason {
-            margin-top: 10px;
+        h1 {
+            color: #007bff;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        textarea {
+            resize: none;
             padding: 10px;
-            background: #f7f7f7;
+            border: 1px solid #007bff;
             border-radius: 5px;
             width: 80%;
             max-width: 500px;
+            min-height: 150px; /* Increased the height */
+            font-size: 1.1em;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #response, #riskLevel, #reason {
+            margin-top: 20px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ccc;
+            width: 300px;
+            min-height: 50px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            background-color: #f1f1f1;
         }
         .risk-level-high { color: #dc3545; }
         .risk-level-medium { color: #ffc107; }
         .risk-level-low { color: #28a745; }
     </style>
 </head>
-
 <body>
-    <h1>Fishing for phishing</h1>
+    <h1>Ask Gemini</h1>
     <textarea id="emailContent" placeholder="Paste your email message here..."></textarea>
-    <button onclick="askGemini()">Analyze Email</button>
+    <button onclick="analyzeEmail()">Analyze Email</button>
     <div id="response"></div>
     <div id="riskLevel"></div>
-    <div id="suspiciousMaterial"></div>
     <div id="reason"></div>
 
     <script>
-        async function askGemini() {
+        function analyzeEmail() {
             const emailContent = document.getElementById('emailContent').value;
             const responseDiv = document.getElementById('response');
             const riskLevelDiv = document.getElementById('riskLevel');
-            const suspiciousMaterialDiv = document.getElementById('suspiciousMaterial');
             const reasonDiv = document.getElementById('reason');
 
             if (!emailContent) {
@@ -59,76 +85,96 @@
 
             responseDiv.innerText = 'Analyzing email...';
             riskLevelDiv.innerText = '';
-            suspiciousMaterialDiv.innerText = '';
             reasonDiv.innerHTML = '';
 
-            try {
-                const { riskScore, suspiciousScore, reasons } = calculateRisk(emailContent);
-                const riskLevel = getRiskLevel(riskScore);
-                const suspiciousMaterial = getSuspiciousMaterialLevel(suspiciousScore);
-                
-                riskLevelDiv.innerText = `Risk Level: ${riskLevel}`;
-                setRiskColor(riskLevelDiv, riskLevel);
-                suspiciousMaterialDiv.innerText = `Suspicious Material Level: ${suspiciousMaterial}`;
-                
-                if (reasons.length > 0) {
-                    reasonDiv.innerHTML = `<strong>Reasons:</strong><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>`;
-                } else {
-                    reasonDiv.innerHTML = '<strong>No significant risk indicators found.</strong>';
-                }
-            } catch (error) {
-                responseDiv.innerText = 'Error getting response!';
-                console.error(error);
-            }
+            // Evaluate risk
+            const { riskScore, reasons } = calculateRisk(emailContent);
+            const riskLevel = getRiskLevel(riskScore);
+
+            riskLevelDiv.innerText = `Risk Level: ${riskLevel}`;
+            setRiskColor(riskLevel);
+
+            reasonDiv.innerHTML = reasons.length 
+                ? `<strong>Reasons for Risk Level:</strong><ul>${reasons.map(r => `<li>${r}</li>`).join('')}</ul>` 
+                : '<strong>No significant risk indicators found.</strong>';
         }
 
         function calculateRisk(text) {
-            let riskScore = 0, suspiciousScore = 0;
+            let score = 0;
             let reasons = [];
 
-            const riskIndicators = [
-                { phrase: /immediate action required|urgent|act now/i, points: 3, reason: 'Urgent language used' },
-                { phrase: /enter your password immediately/i, points: 4, reason: 'Password request detected' },
-                { phrase: /verify your account|confirm your identity/i, points: 3, reason: 'Verification request detected' },
-                { phrase: /click here/i, points: 2, reason: 'Generic click-bait link detected' }
+            const riskFactors = [
+                { phrase: /verify your account|confirm your identity/i, points: 3, reason: 'Fake account verification' },
+                { phrase: /password|credit card|social security/i, points: 3, reason: 'Sensitive data request' },
+                { phrase: /your account will be locked|legal action/i, points: 3, reason: 'Threat of account suspension or legal action' },
+                { phrase: /bitcoin|crypto investment/i, points: 3, reason: 'Suspicious investment opportunity' },
+                { phrase: /blackmail|we have access to your data/i, points: 3, reason: 'Blackmail or extortion threat' },
+                { phrase: /dear customer|dear user/i, points: 2, reason: 'Generic greeting' },
+                { phrase: /unusual login attempt/i, points: 2, reason: 'Fake security alert' },
+                { phrase: /please update your payment info/i, points: 2, reason: 'Fake payment update request' },
+                { phrase: /click here|access your account/i, points: 2, reason: 'Phishing link' },
+                { phrase: /you have won|claim your prize/i, points: 2, reason: 'Fake lottery or prize scam' },
+                { phrase: /invoice attached|unpaid invoice/i, points: 2, reason: 'Fake invoice or payment request' },
+                { phrase: /limited time offer|act now/i, points: 1, reason: 'Urgent sales pitch' },
+                { phrase: /50% off|exclusive deal/i, points: 1, reason: 'Suspicious promotional offer' },
+                { phrase: /free gift|earn money fast/i, points: 1, reason: 'Too-good-to-be-true offer' },
             ];
 
-            const suspiciousIndicators = [
-                { phrase: /50% off|exclusive deal|limited time/i, points: 1, reason: 'Discount offer detected' },
-                { phrase: /congratulations, you won/i, points: 2, reason: 'Potential lottery scam detected' }
-            ];
+            // Check for links in the text
+            const linkRegex = /https?:\/\/[^\s]+/g;
+            const links = text.match(linkRegex);
 
-            riskIndicators.forEach(indicator => {
-                if (indicator.phrase.test(text)) {
-                    riskScore += indicator.points;
-                    reasons.push(indicator.reason);
+            if (links && links.length > 0) {
+                score += 2;
+                reasons.push('Suspicious link(s) detected');
+
+                // Evaluate risk for each link
+                links.forEach(link => {
+                    const linkRisk = evaluateLinkRisk(link);
+                    if (linkRisk) {
+                        score += 2; // Add risk score for the link
+                        reasons.push(`Suspicious link detected: ${linkRisk}`);
+                    }
+                });
+            }
+
+            riskFactors.forEach(({ phrase, points, reason }) => {
+                if (phrase.test(text)) {
+                    score += points;
+                    reasons.push(reason);
                 }
             });
 
-            suspiciousIndicators.forEach(indicator => {
-                if (indicator.phrase.test(text)) {
-                    suspiciousScore += indicator.points;
-                    reasons.push(indicator.reason);
-                }
-            });
+            return { riskScore: score, reasons };
+        }
 
-            return { riskScore, suspiciousScore, reasons };
+        function evaluateLinkRisk(link) {
+            // Simple checks for suspicious URL patterns (can be expanded)
+            const suspiciousDomains = ['bit.ly', 'tinyurl.com', 'goo.gl'];
+            const suspiciousPattern = /(?:http(?:s)?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:bit\.ly|tinyurl\.com|goo\.gl))/;
+
+            // Check if the link is using a suspicious URL shortener
+            if (suspiciousDomains.some(domain => link.includes(domain))) {
+                return 'URL shortener detected (may be used for phishing)';
+            }
+
+            // Check if the link matches a suspicious pattern
+            if (suspiciousPattern.test(link)) {
+                return 'Suspicious URL pattern detected';
+            }
+
+            return null; // No significant risk detected for this link
         }
 
         function getRiskLevel(score) {
-            if (score >= 7) return 'High';
-            if (score >= 4) return 'Medium';
-            return 'Low';
+            return score >= 7 ? "High" : score >= 4 ? "Medium" : "Low";
         }
 
-        function getSuspiciousMaterialLevel(score) {
-            if (score >= 3) return 'High';
-            if (score >= 2) return 'Medium';
-            return 'Low';
-        }
-
-        function setRiskColor(element, level) {
-            element.className = level === 'High' ? 'risk-level-high' : level === 'Medium' ? 'risk-level-medium' : 'risk-level-low';
+        function setRiskColor(riskLevel) {
+            const riskLevelDiv = document.getElementById('riskLevel');
+            riskLevelDiv.className = riskLevel === "High" ? 'risk-level-high' 
+                : riskLevel === "Medium" ? 'risk-level-medium' 
+                : 'risk-level-low';
         }
     </script>
 </body>
