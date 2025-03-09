@@ -17,9 +17,9 @@ def analyze_phishing(input_text):
 
     Provide your analysis in the following format:
     - Phishing Risk: [Low ✅,Medium ⚠️,High ❌]
+    - Confidence: [Number 1-10]
     - Explanation: [Your explanation here]
-    -Confidence: [Number 1-10]
-    -Indicators: [List of indicators that led you to the conclusion]
+    - Indicators: [List of indicators that led you to the conclusion]
     """
 
     # Send the prompt to Gemini
